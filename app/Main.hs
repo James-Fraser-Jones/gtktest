@@ -10,8 +10,8 @@ import Graphics.UI.Gtk.Layout.Grid
 
 --------------------------------------------------------------------------------
 
-rows = 30
-cols = 20
+rows = 10
+cols = 5
 
 main :: IO ()
 main = do
@@ -37,6 +37,16 @@ main = do
   containerAdd gridWindow grid
 
   containerAdd window gridWindow
+
+  cells <- getCells grid
+  let cell = getCell cells rows cols 1 1
+  writeToCell cell "James"
+  let cell = getCell cells rows cols 2 1
+  writeToCell cell "James"
+  let cell = getCell cells rows cols 2 2
+  writeToCell cell "James"
+  let cell = getCell cells rows cols 1 2
+  writeToCell cell "James"
 
   window `on` deleteEvent $ do
    liftIO mainQuit

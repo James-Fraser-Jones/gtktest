@@ -22,11 +22,6 @@ attachRow labelSettings grid name y = labelNew (Just name) >>= (\label -> set la
 attachCells :: [AttrOp Entry] -> Grid -> Int -> Int -> IO ()
 attachCells entrySettings grid rows cols = void $ sequenceA $ attachCell entrySettings grid <$> [1..cols] <*> [1..rows]
 
---attachCells entrySettings grid rows cols = void $ sequenceA $ do
---  row <- [1..rows]
---  col <- [1..cols]
---  pure $ attachCell ((entryText := (show row <> show col)):entrySettings grid row col)
-
 attachRows :: [AttrOp Label] -> Grid -> [String] -> IO ()
 attachRows labelSettings grid names = void $ sequenceA $ zipWith ($) (attachRow labelSettings grid <$> names) [1..length names]
 
@@ -44,5 +39,14 @@ colNames cols = (pure.toEnum.(+64)) <$> [1..cols]
 
 --------------------------------------------------------------------------------
 
+getCells :: Grid -> IO [Entry]
+getCells grid = do
+  cells <- containerGetChildren grid
+  let newcells = map castToEntry cells
+  return newcells
+
+getCell :: [Entry] -> Int -> Int -> Int -> Int -> Entry
+getCell list rows cols x y = list !! ((rows - 1) * (cols - 1) - y - (x * rows))
+
 writeToCell :: Entry -> String -> IO ()
-writeToCell e text = set e [entryText := text]
+writeToCell cell text = set cell [entryText := text]
