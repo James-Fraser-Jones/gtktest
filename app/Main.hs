@@ -41,8 +41,8 @@ colNames cols = (pure.toEnum.(+64)) <$> [1..cols]
 
 --------------------------------------------------------------------------------
 
-rows = 10
-cols = 6
+rows = 30
+cols = 20
 
 main :: IO ()
 main = do
@@ -50,21 +50,24 @@ main = do
 
   window <- windowNew
   set window [ windowTitle         := "DB Viewer"
-             , windowResizable     := True
+             , windowResizable     := False
              , windowDefaultWidth  := 1280
              , windowDefaultHeight := 720
              , windowWindowPosition := WinPosCenter]
 
   grid <- gridNew
   gridSetRowHomogeneous grid True
-  gridSetColumnHomogeneous grid True
+  --gridSetColumnHomogeneous grid True
 
   attachCorner [] grid "✕"
-  attachRows [] grid $ rowNames rows
+  attachRows [labelWidthChars := 5] grid $ rowNames rows
   attachCols [] grid $ colNames cols
-  attachCells [] grid rows cols --there is a minimum width and height for entry boxes, not sure how to change this
+  attachCells [entryWidthChars := 10] grid rows cols --there is a minimum width and height for entry boxes, not sure how to change this
 
-  containerAdd window grid
+  gridWindow <- scrolledWindowNew Nothing Nothing --adds scrolling for our grid
+  containerAdd gridWindow grid
+
+  containerAdd window gridWindow
 
   window `on` deleteEvent $ do
    liftIO mainQuit
