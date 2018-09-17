@@ -38,15 +38,8 @@ main = do
 
   containerAdd window gridWindow
 
-  cells <- getCells grid
-  let cell = getCell cells rows cols 1 1
-  writeToCell cell "James"
-  let cell = getCell cells rows cols 2 1
-  writeToCell cell "James"
-  let cell = getCell cells rows cols 2 2
-  writeToCell cell "James"
-  let cell = getCell cells rows cols 1 2
-  writeToCell cell "James"
+  children <- containerGetChildren grid
+  sequenceA $ ((>>= putStrLn).widgetGetName) <$> children
 
   window `on` deleteEvent $ do
    liftIO mainQuit

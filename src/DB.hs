@@ -94,6 +94,8 @@ sqlToItem [a,b,c,d,e,f,g] = Item (fromSql a) (fromSql b) (fromSql c) (fromSql d)
 -------------------------------------------------------------------------------------------------------
 --Creating random records
 
+newtype Table = Table {unTable :: [Item]} deriving (Show, Eq)
+
 tableR :: Int -> IO Table
 tableR n = Table <$> (mapM itemR [1..n])
 
